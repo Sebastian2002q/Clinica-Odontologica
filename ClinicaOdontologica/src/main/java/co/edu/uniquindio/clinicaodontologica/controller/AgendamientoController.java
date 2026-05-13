@@ -24,4 +24,8 @@ public class AgendamientoController {
     public void eliminarEspecialista(Especialista especialista) {
         modelFactory.eliminarEspecialista(especialista);
     }
+
+    public void eliminarCita(Cita citaSeleccionada) {
+        modelFactory.eliminarCita(citaSeleccionada);
+    }
 }

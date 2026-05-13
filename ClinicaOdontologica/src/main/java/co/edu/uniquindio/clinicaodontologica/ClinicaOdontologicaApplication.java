@@ -16,6 +16,7 @@ public class ClinicaOdontologicaApplication extends Application {
         Scene scene = new Scene(loader.load());
         stage.setTitle("Clínica Odontológica");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
     public static void main(String[] args) {

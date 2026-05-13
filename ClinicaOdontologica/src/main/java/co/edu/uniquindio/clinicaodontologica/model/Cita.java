@@ -18,10 +18,6 @@ public class Cita {
     @Override
     public String toString() {
 
-        return paciente.getNombre()
-                + " - "
-                + fecha
-                + " "
-                + hora;
+        return paciente.getNombre() + " - " + fecha + " " + hora;
     }
 }

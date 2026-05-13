@@ -19,131 +19,103 @@
       fx:controller="co.edu.uniquindio.clinicaodontologica.viewcontroller.LoginViewController">
 
     <children>
-
-        <!-- PANEL IZQUIERDO -->
-
         <StackPane minWidth="320.0"
                    prefWidth="400.0"
                    HBox.hgrow="ALWAYS"
                    style="-fx-background-color: linear-gradient(to bottom right, #2563EB, #1E3A8A);">
-
             <children>
-
                 <VBox alignment="CENTER"
                       spacing="20.0"
                       maxWidth="320.0">
-
                     <children>
-
                         <ImageView fitHeight="150.0"
                                    fitWidth="150.0"
                                    pickOnBounds="true"
                                    preserveRatio="true">
-
                             <image>
                                 <Image url="@/images/logo.png"/>
                             </image>
-
                         </ImageView>
-
                         <Label text="Dental U"
                                style="-fx-text-fill: white;
                                       -fx-font-size: 30px;
                                       -fx-font-weight: bold;"/>
-
                         <Label text="Sistema de Gestión y Agendamiento"
                                wrapText="true"
                                alignment="CENTER"
                                style="-fx-text-fill: white;
                                       -fx-font-size: 16px;"/>
-
                     </children>
-
                 </VBox>
-
             </children>
-
         </StackPane>
-
-        <!-- PANEL DERECHO -->
-
         <StackPane minWidth="420.0"
                    HBox.hgrow="ALWAYS"
                    style="-fx-background-color: #EEF2FF;">
-
             <padding>
                 <Insets top="40" right="40" bottom="40" left="40"/>
             </padding>
-
             <children>
-
                 <VBox alignment="CENTER"
-                      spacing="20.0"
-                      maxWidth="360.0"
+                      spacing="22.0"
+                      maxWidth="460.0"
+                      prefWidth="460.0"
                       style="-fx-background-color: white;
                              -fx-background-radius: 15;
                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5);">
-
                     <padding>
-                        <Insets bottom="35" left="35" right="35" top="35"/>
+                        <Insets bottom="45"
+                                left="45"
+                                right="45"
+                                top="45"/>
                     </padding>
-
                     <children>
-
                         <Label text="Bienvenido"
-                               style="-fx-font-size: 28px;
+                               style="-fx-font-size: 30px;
                                       -fx-font-weight: bold;"/>
 
                         <Label text="Inicia sesión para continuar"
                                style="-fx-text-fill: #6B7280;
                                       -fx-font-size: 14px;"/>
-
                         <TextField fx:id="txtUsuario"
                                    maxWidth="Infinity"
-                                   prefHeight="40.0"
+                                   prefHeight="45.0"
                                    promptText="Usuario"
                                    style="-fx-background-radius: 8;
-                                          -fx-border-radius: 8;"/>
-
+                                          -fx-border-radius: 8;
+                                          -fx-font-size: 14px;"/>
                         <PasswordField fx:id="txtPassword"
                                        maxWidth="Infinity"
-                                       prefHeight="40.0"
+                                       prefHeight="45.0"
                                        promptText="Contraseña"
                                        style="-fx-background-radius: 8;
-                                              -fx-border-radius: 8;"/>
-
+                                              -fx-border-radius: 8;
+                                              -fx-font-size: 14px;"/>
                         <Button fx:id="btnLogin"
                                 mnemonicParsing="false"
                                 onAction="#iniciarSesion"
                                 maxWidth="Infinity"
-                                prefHeight="45.0"
+                                prefHeight="48.0"
                                 style="-fx-background-color: #2563EB;
                                        -fx-text-fill: white;
                                        -fx-font-size: 15px;
                                        -fx-font-weight: bold;
                                        -fx-background-radius: 10;"
                                 text="Iniciar Sesión"/>
-
                         <Button fx:id="btnRegistrarse"
                                 mnemonicParsing="false"
                                 onAction="#registrarse"
                                 maxWidth="Infinity"
-                                prefHeight="45.0"
+                                prefHeight="48.0"
                                 style="-fx-background-color: #2563EB;
                                        -fx-text-fill: white;
                                        -fx-font-size: 15px;
                                        -fx-font-weight: bold;
                                        -fx-background-radius: 10;"
                                 text="Registrarse"/>
-
                     </children>
-
                 </VBox>
-
             </children>
-
         </StackPane>
-
     </children>
-
 </HBox>

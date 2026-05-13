@@ -1,9 +1,6 @@
 package co.edu.uniquindio.clinicaodontologica.factory;
 
-import co.edu.uniquindio.clinicaodontologica.model.Cita;
-import co.edu.uniquindio.clinicaodontologica.model.ClinicaOdontologica;
-import co.edu.uniquindio.clinicaodontologica.model.Especialista;
-import co.edu.uniquindio.clinicaodontologica.model.Usuario;
+import co.edu.uniquindio.clinicaodontologica.model.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +33,7 @@ public class ModelFactory {
     private static ClinicaOdontologica inicializarDatos() {
         ClinicaOdontologica clinica = new ClinicaOdontologica("DENTAL U");
         Usuario usuario1 = new Usuario("admin", "admin");
-        Usuario usuario2 = new Usuario("Sebastian", "1234");
+        Usuario usuario2 = new Usuario("user", "user");
         clinica.agregarUsuario(usuario1);
         clinica.agregarUsuario(usuario2);
         Map<LocalDate, List<LocalTime>> horariosJuan = new HashMap<>();
@@ -60,8 +57,8 @@ public class ModelFactory {
         return clinica.getEspecialistaList();
     }
 
-    public void agregarCita(Cita cita) {
-        clinica.agregarCita(cita);
+    public boolean agregarCita(Cita cita) {
+        return clinica.agregarCita(cita);
     }
 
     public void eliminarHorarioEspecialista(Especialista especialista, LocalDate fecha, LocalTime hora) {
@@ -78,5 +75,13 @@ public class ModelFactory {
 
     public void agregarEspecialista(Especialista especialista) {
         clinica.agregarEspecialista(especialista);
+    }
+
+    public boolean existeCitaEspecialista(Especialista especialista, LocalDate fecha, LocalTime hora) {
+        return clinica.existeCitaEspecialista(especialista, fecha, hora);
+    }
+
+    public void eliminarCita(Cita citaSeleccionada) {
+        clinica.eliminarCita(citaSeleccionada);
     }
 }

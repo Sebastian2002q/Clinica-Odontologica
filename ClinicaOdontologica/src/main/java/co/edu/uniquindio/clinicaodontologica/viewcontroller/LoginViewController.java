@@ -46,6 +46,8 @@ public class LoginViewController implements Initializable {
                 Stage stage = (Stage) txtUsuario.getScene().getWindow();
                 stage.setScene(scene);
                 stage.setTitle("Agendamiento de Citas");
+                stage.setMaximized(false);
+                stage.setMaximized(true);
                 stage.show();
             } catch (IOException e) {
                 mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo cargar la ventana");

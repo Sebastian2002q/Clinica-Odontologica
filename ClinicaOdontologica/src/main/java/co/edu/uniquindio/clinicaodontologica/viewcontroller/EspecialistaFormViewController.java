@@ -59,6 +59,14 @@ public class EspecialistaFormViewController {
         }
         try {
             LocalTime hora = LocalTime.parse(horaTexto);
+            if (modoEdicion && especialistaController.existeCitaEspecialista(especialistaEditando, fecha, hora)) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Horario ocupado", "No puede agregar este horario porque ya existe una cita agendada para esa fecha y hora.");
+                return;
+            }
+            if (horariosDisponibles.containsKey(fecha) && horariosDisponibles.get(fecha).contains(hora)) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Horario repetido", "Este horario ya fue agregado.");
+                return;
+            }
             horariosDisponibles.computeIfAbsent(fecha, f -> new ArrayList<>()).add(hora);
             horariosDisponibles.get(fecha).sort(LocalTime::compareTo);
             actualizarListaHorarios();

@@ -37,7 +37,7 @@ public class AgendamientoViewController implements Initializable {
     private ListView<Especialista> listaEspecialistas;
 
     @FXML
-    private TextArea txtResumenCitas;
+    private ListView<Cita> listaCitas;
 
     @FXML
     private GridPane gridHorarios;
@@ -45,7 +45,6 @@ public class AgendamientoViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         agendamientoController = new AgendamientoController();
-        txtResumenCitas.setText("No hay citas agendadas.");
         cargarEspecialistas();
         listaEspecialistas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, especialistaSeleccionado) -> {
             if (especialistaSeleccionado != null) {
@@ -144,15 +143,29 @@ public class AgendamientoViewController implements Initializable {
     }
 
     private void cargarCitasEspecialista(Especialista especialista) {
-        txtResumenCitas.clear();
+        listaCitas.getItems().clear();
         List<Cita> citas = agendamientoController.obtenerCitasEspecialista(especialista);
-        if (citas.isEmpty()) {
-            txtResumenCitas.setText("No hay citas agendadas.");
+        listaCitas.getItems().addAll(citas);
+    }
+
+    public void eliminarCita(ActionEvent actionEvent) {
+        Cita citaSeleccionada = listaCitas.getSelectionModel().getSelectedItem();
+        if (citaSeleccionada == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin selección", "Debe seleccionar una cita para eliminar.");
             return;
         }
-        for (Cita cita : citas) {
-            txtResumenCitas.appendText("Paciente: " + cita.getPaciente().getNombre() + "\n" + "Fecha: " + cita.getFecha() + "\n" + "Hora: " + cita.getHora() + "\n" + "Motivo: " + cita.getMotivo() + "\n\n");
-        }
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Eliminar cita");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Está seguro de eliminar la cita del paciente " + citaSeleccionada.getPaciente().getNombre() + "?");
+        confirmacion.showAndWait().ifPresent(respuesta -> {
+            if (respuesta == ButtonType.OK) {
+                agendamientoController.eliminarCita(citaSeleccionada);
+                Especialista especialista = citaSeleccionada.getEspecialista();
+                cargarDisponibilidadEspecialista(especialista);
+                cargarCitasEspecialista(especialista);
+            }
+        });
     }
 
     public void abrirVentanaEspecialista(ActionEvent actionEvent) {
@@ -194,6 +207,7 @@ public class AgendamientoViewController implements Initializable {
                 cargarDisponibilidadEspecialista(especialistaSeleccionado);
                 cargarCitasEspecialista(especialistaSeleccionado);
             }
+
         } catch (IOException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la ventana para editar especialista.");
             e.printStackTrace();
@@ -215,7 +229,7 @@ public class AgendamientoViewController implements Initializable {
                 agendamientoController.eliminarEspecialista(especialistaSeleccionado);
                 cargarEspecialistas();
                 gridHorarios.getChildren().clear();
-                txtResumenCitas.setText("No hay citas agendadas.");
+                listaCitas.getItems().clear();
                 lblTituloAgenda.setText("Agenda de Horarios");
             }
         });
@@ -227,5 +241,30 @@ public class AgendamientoViewController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void cerrarSesion(ActionEvent actionEvent) {
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Cerrar sesión");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Está seguro de cerrar sesión?");
+        confirmacion.showAndWait().ifPresent(respuesta -> {
+            if (respuesta == ButtonType.OK) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/clinicaodontologica/view/login.fxml"));
+                    Scene scene = new Scene(loader.load());
+                    Stage stage = (Stage) lblUsuarioLogueado.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.setTitle("Inicio de Sesión");
+                    stage.setMaximized(false);
+                    stage.setMaximized(true);
+                    stage.show();
+                } catch (IOException e) {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo cerrar sesión.");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

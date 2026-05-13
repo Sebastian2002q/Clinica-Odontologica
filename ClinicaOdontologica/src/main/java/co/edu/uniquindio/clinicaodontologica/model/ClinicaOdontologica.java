@@ -31,8 +31,14 @@ public class ClinicaOdontologica {
         usuarioList.add(usuario);
     }
 
-    public void agregarCita(Cita cita) {
+    public boolean agregarCita(Cita cita) {
+        for (Cita cita1 : citaList) {
+            if (cita1.getPaciente().getCedula().equals(cita.getPaciente().getCedula()) && cita1.getFecha().equals(cita.getFecha()) && cita1.getHora().equals(cita.getHora())) {
+                return false;
+            }
+        }
         citaList.add(cita);
+        return true;
     }
 
     public void agregarEspecialista(Especialista especialista) {
@@ -60,5 +66,21 @@ public class ClinicaOdontologica {
     public void eliminarEspecialista(Especialista especialista) {
         citaList.removeIf(cita -> cita.getEspecialista().equals(especialista));
         especialistaList.remove(especialista);
+    }
+
+    public boolean existeCitaEspecialista(Especialista especialista, LocalDate fecha, LocalTime hora) {
+        for (Cita cita : citaList) {
+            if (cita.getEspecialista().equals(especialista) && cita.getFecha().equals(fecha) && cita.getHora().equals(hora)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void eliminarCita(Cita cita) {
+        citaList.remove(cita);
+        Especialista especialista = cita.getEspecialista();
+        especialista.getHorariosDisponibles().computeIfAbsent(cita.getFecha(), f -> new ArrayList<>()).add(cita.getHora());
+        especialista.getHorariosDisponibles().get(cita.getFecha()).sort(LocalTime::compareTo);
     }
 }

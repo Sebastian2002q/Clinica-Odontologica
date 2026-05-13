@@ -48,13 +48,10 @@ public class CrearCitaViewController {
     private TextArea txtMotivo;
 
     public void setDatosCita(Especialista especialista, LocalDate fecha, LocalTime hora) {
-
         this.crearCitaController = new CrearCitaController();
-
         this.especialista = especialista;
         this.fecha = fecha;
         this.hora = hora;
-
         lblEspecialista.setText(especialista.getNombre());
         lblEspecialidad.setText(especialista.getEspecialidad());
         lblFecha.setText(fecha.toString());
@@ -63,28 +60,23 @@ public class CrearCitaViewController {
 
     @FXML
     public void agendarCita() {
-
         String nombre = txtNombrePaciente.getText();
         String cedula = txtCedulaPaciente.getText();
         String telefono = txtTelefonoPaciente.getText();
         String motivo = txtMotivo.getText();
-
         if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || motivo.isEmpty()) {
-
             mostrarAlerta(Alert.AlertType.WARNING, "Campos incompletos", "Debe completar todos los campos del paciente");
-
             return;
         }
-
         Paciente paciente = new Paciente(nombre, cedula, telefono);
-
         Cita cita = new Cita(paciente, especialista, motivo, fecha, hora);
-
-        crearCitaController.agregarCita(cita);
-        crearCitaController.eliminarHorarioEspecialista(especialista, fecha, hora);
-
-        mostrarAlerta(Alert.AlertType.INFORMATION, "Cita agendada", "La cita fue registrada correctamente");
-
+        boolean create = crearCitaController.agregarCita(cita);
+        if(create ) {
+            crearCitaController.eliminarHorarioEspecialista(especialista, fecha, hora);
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Cita agendada", "La cita fue registrada correctamente");
+        }else{
+            mostrarAlerta(Alert.AlertType.WARNING,"Cruce de horario", "El paciente ya tiene una cita registrada en el horario seleccionado");
+        }
         cerrarVentana();
     }
 
@@ -94,20 +86,15 @@ public class CrearCitaViewController {
     }
 
     private void cerrarVentana() {
-
         Stage stage = (Stage) lblHora.getScene().getWindow();
-
         stage.close();
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
-
         Alert alert = new Alert(tipo);
-
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
-
         alert.showAndWait();
     }
 }

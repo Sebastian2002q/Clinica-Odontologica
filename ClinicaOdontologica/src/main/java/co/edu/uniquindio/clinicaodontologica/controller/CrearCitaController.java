@@ -3,6 +3,7 @@ package co.edu.uniquindio.clinicaodontologica.controller;
 import co.edu.uniquindio.clinicaodontologica.factory.ModelFactory;
 import co.edu.uniquindio.clinicaodontologica.model.Cita;
 import co.edu.uniquindio.clinicaodontologica.model.Especialista;
+import co.edu.uniquindio.clinicaodontologica.model.Paciente;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,12 +14,12 @@ public class CrearCitaController {
     public CrearCitaController() {
         modelFactory = ModelFactory.getInstance();
     }
-    public void agregarCita(Cita cita) {
-        modelFactory.agregarCita(cita);
+
+    public boolean agregarCita(Cita cita) {
+        return modelFactory.agregarCita(cita);
     }
 
     public void eliminarHorarioEspecialista(Especialista especialista, LocalDate fecha, LocalTime hora){
         modelFactory.eliminarHorarioEspecialista(especialista, fecha, hora);
     }
-
 }
