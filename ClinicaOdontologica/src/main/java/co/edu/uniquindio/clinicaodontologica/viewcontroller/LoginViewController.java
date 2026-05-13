@@ -37,11 +37,7 @@ public class LoginViewController implements Initializable {
 
         if (username.isEmpty() || password.isEmpty()) {
 
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos vacíos",
-                    "Debe ingresar usuario y contraseña"
-            );
+            mostrarAlerta(Alert.AlertType.WARNING, "Campos vacíos", "Debe ingresar usuario y contraseña");
 
             return;
         }
@@ -50,18 +46,14 @@ public class LoginViewController implements Initializable {
 
             try {
 
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/co/edu/uniquindio/clinicaodontologica/view/agendamiento.fxml")
-                );
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/clinicaodontologica/view/agendamiento.fxml"));
 
                 Scene scene = new Scene(loader.load());
-                AgendamientoViewController controller =
-                        loader.getController();
+                AgendamientoViewController controller = loader.getController();
 
                 controller.setUsuarioLogueado(username);
 
-                Stage stage =
-                        (Stage) txtUsuario.getScene().getWindow();
+                Stage stage = (Stage) txtUsuario.getScene().getWindow();
 
                 stage.setScene(scene);
                 stage.setTitle("Agendamiento de Citas");
@@ -70,22 +62,14 @@ public class LoginViewController implements Initializable {
 
             } catch (IOException e) {
 
-                mostrarAlerta(
-                        Alert.AlertType.ERROR,
-                        "Error",
-                        "No se pudo cargar la ventana"
-                );
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo cargar la ventana");
 
                 e.printStackTrace();
             }
 
         } else {
 
-            mostrarAlerta(
-                    Alert.AlertType.ERROR,
-                    "Error",
-                    "Usuario o contraseña incorrectos"
-            );
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Usuario o contraseña incorrectos");
 
             txtPassword.clear();
         }
@@ -96,10 +80,7 @@ public class LoginViewController implements Initializable {
 
     }
 
-    private void mostrarAlerta(
-            Alert.AlertType tipo,
-            String titulo,
-            String mensaje) {
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
 
         Alert alert = new Alert(tipo);
 

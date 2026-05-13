@@ -47,10 +47,7 @@ public class CrearCitaViewController {
     @FXML
     private TextArea txtMotivo;
 
-    public void setDatosCita(
-            Especialista especialista,
-            LocalDate fecha,
-            LocalTime hora) {
+    public void setDatosCita(Especialista especialista, LocalDate fecha, LocalTime hora) {
 
         this.crearCitaController = new CrearCitaController();
 
@@ -72,42 +69,21 @@ public class CrearCitaViewController {
         String telefono = txtTelefonoPaciente.getText();
         String motivo = txtMotivo.getText();
 
-        if (nombre.isEmpty()
-                || cedula.isEmpty()
-                || telefono.isEmpty()
-                || motivo.isEmpty()) {
+        if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || motivo.isEmpty()) {
 
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos incompletos",
-                    "Debe completar todos los campos del paciente"
-            );
+            mostrarAlerta(Alert.AlertType.WARNING, "Campos incompletos", "Debe completar todos los campos del paciente");
 
             return;
         }
 
-        Paciente paciente = new Paciente(
-                nombre,
-                cedula,
-                telefono
-        );
+        Paciente paciente = new Paciente(nombre, cedula, telefono);
 
-        Cita cita = new Cita(
-                paciente,
-                especialista,
-                motivo,
-                fecha,
-                hora
-        );
+        Cita cita = new Cita(paciente, especialista, motivo, fecha, hora);
 
         crearCitaController.agregarCita(cita);
-        crearCitaController.eliminarHorarioEspecialista(especialista,fecha,hora);
+        crearCitaController.eliminarHorarioEspecialista(especialista, fecha, hora);
 
-        mostrarAlerta(
-                Alert.AlertType.INFORMATION,
-                "Cita agendada",
-                "La cita fue registrada correctamente"
-        );
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Cita agendada", "La cita fue registrada correctamente");
 
         cerrarVentana();
     }
@@ -119,16 +95,12 @@ public class CrearCitaViewController {
 
     private void cerrarVentana() {
 
-        Stage stage =
-                (Stage) lblHora.getScene().getWindow();
+        Stage stage = (Stage) lblHora.getScene().getWindow();
 
         stage.close();
     }
 
-    private void mostrarAlerta(
-            Alert.AlertType tipo,
-            String titulo,
-            String mensaje) {
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
 
         Alert alert = new Alert(tipo);
 

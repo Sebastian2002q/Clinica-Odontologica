@@ -20,4 +20,8 @@ public class AgendamientoController {
     public List<Cita> obtenerCitasEspecialista(Especialista especialista) {
         return modelFactory.obtenerCitasEspecialista(especialista);
     }
+
+    public void eliminarEspecialista(Especialista especialista) {
+        modelFactory.eliminarEspecialista(especialista);
+    }
 }

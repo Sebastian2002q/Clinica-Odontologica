@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="620.0"
+            prefWidth="720.0"
+            minHeight="580.0"
+            minWidth="680.0"
+            style="-fx-background-color: #EEF2FF;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.clinicaodontologica.viewcontroller.EspecialistaFormViewController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              prefHeight="70.0"
+              spacing="15.0"
+              style="-fx-background-color: linear-gradient(to right, #2563EB, #1E3A8A);
+                     -fx-padding: 0 25 0 25;">
+
+            <Label fx:id="lblTitulo"
+                   text="Nuevo Especialista"
+                   textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="DENTAL U"
+                   textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="15.0"/>
+                </font>
+            </Label>
+
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane style="-fx-padding: 30;">
+
+            <VBox spacing="18.0"
+                  maxWidth="560.0"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 16;
+                         -fx-padding: 28;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);">
+
+                <Label text="Información del Especialista"
+                       textFill="#1E3A8A">
+                    <font>
+                        <Font name="System Bold" size="20.0"/>
+                    </font>
+                </Label>
+
+                <Label text="Complete los datos del profesional y registre su disponibilidad"
+                       wrapText="true"
+                       textFill="#6B7280"/>
+
+                <GridPane hgap="14.0"
+                          vgap="14.0"
+                          maxWidth="Infinity">
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120.0"
+                                           prefWidth="140.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Nombre"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="0"/>
+
+                    <TextField fx:id="txtNombre"
+                               promptText="Nombre del especialista"
+                               prefHeight="38.0"
+                               maxWidth="Infinity"
+                               GridPane.columnIndex="1"
+                               GridPane.rowIndex="0"/>
+
+                    <Label text="Especialidad"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+
+                    <TextField fx:id="txtEspecialidad"
+                               promptText="Ejemplo: Ortodoncia"
+                               prefHeight="38.0"
+                               maxWidth="Infinity"
+                               GridPane.columnIndex="1"
+                               GridPane.rowIndex="1"/>
+
+                </GridPane>
+
+                <Separator/>
+
+                <Label text="Disponibilidad"
+                       textFill="#1E3A8A">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Label>
+
+                <GridPane hgap="14.0"
+                          vgap="14.0"
+                          maxWidth="Infinity">
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120.0"
+                                           prefWidth="140.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Fecha"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="0"/>
+
+                    <DatePicker fx:id="dateFecha"
+                                prefHeight="38.0"
+                                maxWidth="Infinity"
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="0"/>
+
+                    <Label text="Hora"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+
+                    <HBox spacing="10.0"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1">
+
+                        <TextField fx:id="txtHora"
+                                   promptText="Ejemplo: 08:00"
+                                   prefHeight="38.0"
+                                   HBox.hgrow="ALWAYS"/>
+
+                        <Button text="Agregar"
+                                onAction="#agregarHorario"
+                                prefHeight="38.0"
+                                prefWidth="100.0"
+                                style="-fx-background-color: #DBEAFE;
+                                       -fx-text-fill: #2563EB;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 8;"/>
+                    </HBox>
+
+                </GridPane>
+
+                <ListView fx:id="listaHorarios"
+                          prefHeight="120.0"
+                          maxHeight="140.0"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <HBox alignment="CENTER_RIGHT"
+                      spacing="12.0">
+
+                    <Button fx:id="btnCancelar"
+                            text="Cancelar"
+                            onAction="#cancelar"
+                            prefHeight="42.0"
+                            prefWidth="120.0"
+                            style="-fx-background-color: #E5E7EB;
+                                   -fx-text-fill: #374151;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 10;"/>
+
+                    <Button fx:id="btnGuardar"
+                            text="Guardar"
+                            onAction="#guardarEspecialista"
+                            prefHeight="42.0"
+                            prefWidth="130.0"
+                            style="-fx-background-color: #2563EB;
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 10;"/>
+
+                </HBox>
+
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

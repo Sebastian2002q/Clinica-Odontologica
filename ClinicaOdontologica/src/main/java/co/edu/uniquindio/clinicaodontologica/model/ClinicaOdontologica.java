@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.*;
+
 @Getter
 public class ClinicaOdontologica {
     private String name;
@@ -48,11 +50,15 @@ public class ClinicaOdontologica {
     public List<Cita> obtenerCitasEspecialista(Especialista especialista) {
         List<Cita> citasEspecialista = new ArrayList<>();
         for (Cita cita : citaList) {
-
             if (cita.getEspecialista().equals(especialista)) {
                 citasEspecialista.add(cita);
             }
         }
         return citasEspecialista;
+    }
+
+    public void eliminarEspecialista(Especialista especialista) {
+        citaList.removeIf(cita -> cita.getEspecialista().equals(especialista));
+        especialistaList.remove(especialista);
     }
 }

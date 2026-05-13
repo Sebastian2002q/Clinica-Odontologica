@@ -49,15 +49,64 @@
                      -fx-border-color: #e0e0e0;
                      -fx-border-width: 0 1 0 0;">
 
-            <Label text="ESPECIALISTAS"
-                   textFill="#757575">
-                <font>
-                    <Font name="System Bold" size="12.0"/>
-                </font>
-                <VBox.margin>
-                    <Insets bottom="10.0" left="15.0" top="20.0"/>
-                </VBox.margin>
-            </Label>
+            <VBox spacing="10.0">
+
+                <HBox alignment="CENTER_LEFT"
+                      spacing="10.0">
+
+                    <Label text="ESPECIALISTAS"
+                           textFill="#757575">
+
+                        <font>
+                            <Font name="System Bold" size="12.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="btnAgregarEspecialista"
+                            mnemonicParsing="false"
+                            onAction="#abrirVentanaEspecialista"
+                            prefHeight="26.0"
+                            prefWidth="26.0"
+                            focusTraversable="false"
+                            style="-fx-background-color: #DBEAFE;
+                                   -fx-text-fill: #2563EB;
+                                   -fx-font-size: 12px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 6;
+                                   -fx-cursor: hand;"
+                            text="+"/>
+                    <Button fx:id="btnEditarEspecialista"
+                            mnemonicParsing="false"
+                            onAction="#editarEspecialista"
+                            prefHeight="26.0"
+                            prefWidth="26.0"
+                            focusTraversable="false"
+                            style="-fx-background-color: #DBEAFE;
+                                    -fx-text-fill: #2563EB;
+                                    -fx-font-size: 12px;
+                                    -fx-font-weight: bold;
+                                    -fx-background-radius: 6;
+                                    -fx-cursor: hand;"
+                            text="..."/>
+                    <Button fx:id="btnEliminarEspecialista"
+                            mnemonicParsing="false"
+                            onAction="#eliminarEspecialista"
+                            prefHeight="26.0"
+                            prefWidth="26.0"
+                            focusTraversable="false"
+                            style="-fx-background-color: #FEE2E2;
+                                   -fx-text-fill: #DC2626;
+                                   -fx-font-size: 12px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 6;
+                                   -fx-cursor: hand;"
+                            text="X"/>
+                </HBox>
+
+            </VBox>
 
             <ListView fx:id="listaEspecialistas"
                       VBox.vgrow="ALWAYS"
