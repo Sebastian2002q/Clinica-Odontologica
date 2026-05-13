@@ -21,10 +21,8 @@ public class Especialista {
     }
 
     public void eliminarHorario(LocalDate fecha, LocalTime hora) {
-
         if (horariosDisponibles.containsKey(fecha)) {
             horariosDisponibles.get(fecha).remove(hora);
-
             if (horariosDisponibles.get(fecha).isEmpty()) {
                 horariosDisponibles.remove(fecha);
             }

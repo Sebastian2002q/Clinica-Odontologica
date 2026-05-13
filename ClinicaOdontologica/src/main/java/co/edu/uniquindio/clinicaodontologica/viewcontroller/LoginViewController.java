@@ -31,46 +31,28 @@ public class LoginViewController implements Initializable {
 
     @FXML
     public void iniciarSesion() {
-
         String username = txtUsuario.getText();
         String password = txtPassword.getText();
-
         if (username.isEmpty() || password.isEmpty()) {
-
             mostrarAlerta(Alert.AlertType.WARNING, "Campos vacíos", "Debe ingresar usuario y contraseña");
-
             return;
         }
-
         if (loginController.verificarCredenciales(username, password)) {
-
             try {
-
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/clinicaodontologica/view/agendamiento.fxml"));
-
                 Scene scene = new Scene(loader.load());
                 AgendamientoViewController controller = loader.getController();
-
                 controller.setUsuarioLogueado(username);
-
                 Stage stage = (Stage) txtUsuario.getScene().getWindow();
-
                 stage.setScene(scene);
                 stage.setTitle("Agendamiento de Citas");
-
                 stage.show();
-
             } catch (IOException e) {
-
                 mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo cargar la ventana");
-
                 e.printStackTrace();
             }
-
         } else {
-
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "Usuario o contraseña incorrectos");
-
             txtPassword.clear();
         }
     }
@@ -81,13 +63,10 @@ public class LoginViewController implements Initializable {
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
-
         Alert alert = new Alert(tipo);
-
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
-
         alert.showAndWait();
     }
 }
