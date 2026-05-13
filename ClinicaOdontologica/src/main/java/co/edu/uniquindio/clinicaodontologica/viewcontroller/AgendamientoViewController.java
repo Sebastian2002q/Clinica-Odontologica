@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AgendamientoViewController implements Initializable {
 
@@ -71,7 +69,9 @@ public class AgendamientoViewController implements Initializable {
         gridHorarios.getChildren().clear();
         gridHorarios.getColumnConstraints().clear();
         gridHorarios.setMaxWidth(Double.MAX_VALUE);
-        lblTituloAgenda.setText("Agenda de Horarios - " + especialista.getNombre());
+        lblTituloAgenda.setText(
+                "Agenda de Horarios - " + especialista.getNombre()
+        );
         ColumnConstraints columnaPrincipal = new ColumnConstraints();
         columnaPrincipal.setPercentWidth(100);
         columnaPrincipal.setHgrow(Priority.ALWAYS);
@@ -80,14 +80,21 @@ public class AgendamientoViewController implements Initializable {
         accordion.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(accordion, Priority.ALWAYS);
         GridPane.setFillWidth(accordion, true);
-        Map<LocalDate, List<LocalTime>> disponibilidad = especialista.getHorariosDisponibles();
+        Map<LocalDate, List<LocalTime>> disponibilidad =
+                especialista.getHorariosDisponibles();
         if (disponibilidad == null || disponibilidad.isEmpty()) {
             Label label = new Label("Este especialista no tiene horarios disponibles.");
-            label.setStyle("-fx-text-fill: #6B7280;" + "-fx-font-size: 14px;");
+            label.setStyle(
+                    "-fx-text-fill: #6B7280;" +
+                            "-fx-font-size: 14px;"
+            );
             gridHorarios.add(label, 0, 0);
             return;
         }
-        for (LocalDate fecha : disponibilidad.keySet()) {
+        List<LocalDate> fechasOrdenadas =
+                new ArrayList<>(disponibilidad.keySet());
+        Collections.sort(fechasOrdenadas);
+        for (LocalDate fecha : fechasOrdenadas) {
             GridPane gridHoras = new GridPane();
             gridHoras.setHgap(15);
             gridHoras.setVgap(15);
@@ -102,14 +109,24 @@ public class AgendamientoViewController implements Initializable {
             }
             int columna = 0;
             int fila = 0;
-            for (LocalTime hora : disponibilidad.get(fecha)) {
+            List<LocalTime> horasOrdenadas =
+                    new ArrayList<>(disponibilidad.get(fecha));
+            Collections.sort(horasOrdenadas);
+            for (LocalTime hora : horasOrdenadas) {
                 Button botonHorario = new Button(hora.toString());
                 botonHorario.setMaxWidth(Double.MAX_VALUE);
                 botonHorario.setPrefHeight(45);
-                botonHorario.setStyle("-fx-background-color: #2563EB;" + "-fx-text-fill: white;" + "-fx-font-weight: bold;" + "-fx-background-radius: 10;");
+                botonHorario.setStyle(
+                        "-fx-background-color: #2563EB;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 10;"
+                );
                 GridPane.setHgrow(botonHorario, Priority.ALWAYS);
                 GridPane.setFillWidth(botonHorario, true);
-                botonHorario.setOnAction(e -> abrirVentanaCrearCita(especialista, fecha, hora));
+                botonHorario.setOnAction(e ->
+                        abrirVentanaCrearCita(especialista, fecha, hora)
+                );
                 gridHoras.add(botonHorario, columna, fila);
                 columna++;
                 if (columna == 4) {
@@ -117,7 +134,8 @@ public class AgendamientoViewController implements Initializable {
                     fila++;
                 }
             }
-            TitledPane paneFecha = new TitledPane("Fecha: " + fecha, gridHoras);
+            TitledPane paneFecha =
+                    new TitledPane("Fecha: " + fecha, gridHoras);
             paneFecha.setMaxWidth(Double.MAX_VALUE);
             accordion.getPanes().add(paneFecha);
         }
