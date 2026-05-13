@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.clinicaodontologica.viewcontroller.AgendamientoViewController"
+            prefHeight="600.0"
+            prefWidth="900.0"
+            minHeight="550.0"
+            minWidth="850.0"
+            style="-fx-background-color: #f5f7fa;">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              prefHeight="60.0"
+              minHeight="60.0"
+              spacing="20.0"
+              style="-fx-background-color: linear-gradient(to right, #2563EB, #1E3A8A);
+                     -fx-padding: 0 20 0 20;">
+
+            <Label text="DENTAL U" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="lblUsuarioLogueado"
+                   text="Sesión:"
+                   textFill="WHITE">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+
+        </HBox>
+    </top>
+
+    <left>
+        <VBox prefWidth="270.0"
+              minWidth="240.0"
+              maxWidth="320.0"
+              style="-fx-background-color: white;
+                     -fx-border-color: #e0e0e0;
+                     -fx-border-width: 0 1 0 0;">
+
+            <Label text="ESPECIALISTAS"
+                   textFill="#757575">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="15.0" top="20.0"/>
+                </VBox.margin>
+            </Label>
+
+            <ListView fx:id="listaEspecialistas"
+                      VBox.vgrow="ALWAYS"
+                      style="-fx-background-insets: 0;
+                             -fx-background-radius: 10;
+                             -fx-border-radius: 10;"/>
+
+            <VBox minHeight="150.0"
+                  prefHeight="180.0"
+                  maxHeight="230.0"
+                  style="-fx-background-color: #fafafa;
+                         -fx-padding: 10;">
+
+                <Label text="MIS CITAS"
+                       textFill="#283593">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+
+                <TextArea fx:id="txtResumenCitas"
+                          editable="false"
+                          wrapText="true"
+                          VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: transparent;
+                                 -fx-font-size: 11px;"/>
+
+            </VBox>
+
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane style="-fx-padding: 25;">
+
+            <VBox spacing="20.0"
+                  StackPane.alignment="CENTER"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 15;
+                         -fx-padding: 30;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+
+                <Label fx:id="lblTituloAgenda"
+                       text="Agenda de Horarios">
+                    <font>
+                        <Font name="System Bold" size="22.0"/>
+                    </font>
+                </Label>
+
+                <ScrollPane fx:id="scrollHorarios"
+                            fitToWidth="true"
+                            fitToHeight="true"
+                            VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent;
+                                   -fx-background-insets: 0;
+                                   -fx-padding: 0;">
+
+                    <content>
+                        <GridPane fx:id="gridHorarios"
+                                  hgap="15.0"
+                                  vgap="15.0"
+                                  maxWidth="Infinity"
+                                  style="-fx-padding: 5;"/>
+                    </content>
+
+                </ScrollPane>
+
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

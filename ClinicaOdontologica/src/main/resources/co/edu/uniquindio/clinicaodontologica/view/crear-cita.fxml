@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="560.0"
+            prefWidth="760.0"
+            minHeight="520.0"
+            minWidth="700.0"
+            style="-fx-background-color: #EEF2FF;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.clinicaodontologica.viewcontroller.CrearCitaViewController">
+
+    <!-- HEADER -->
+
+    <top>
+
+        <HBox alignment="CENTER_LEFT"
+              prefHeight="70.0"
+              spacing="15.0"
+              style="-fx-background-color: linear-gradient(to right, #2563EB, #1E3A8A);
+                     -fx-padding: 0 25 0 25;">
+
+            <Label text="Nueva Cita"
+                   textFill="WHITE">
+
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="DENTAL U"
+                   textFill="WHITE">
+
+                <font>
+                    <Font name="System Bold" size="15.0"/>
+                </font>
+
+            </Label>
+
+        </HBox>
+
+    </top>
+
+    <!-- CONTENIDO -->
+
+    <center>
+
+        <VBox spacing="20.0"
+              style="-fx-padding: 30;">
+
+            <HBox spacing="20.0"
+                  HBox.hgrow="ALWAYS">
+
+                <!-- PANEL RESUMEN -->
+
+                <VBox prefWidth="250.0"
+                      minWidth="230.0"
+                      maxWidth="280.0"
+                      spacing="14.0"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-padding: 25;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);">
+
+                    <Label text="Resumen"
+                           textFill="#1E3A8A">
+
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Separator/>
+
+                    <Label text="Especialista"
+                           textFill="#6B7280"/>
+
+                    <Label fx:id="lblEspecialista"
+                           text="Especialista seleccionado"
+                           wrapText="true"
+                           textFill="#111827">
+
+                        <font>
+                            <Font name="System Bold" size="14.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Especialidad"
+                           textFill="#6B7280"/>
+
+                    <Label fx:id="lblEspecialidad"
+                           text="Especialidad"
+                           wrapText="true"
+                           textFill="#111827">
+
+                        <font>
+                            <Font name="System Bold" size="14.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Fecha"
+                           textFill="#6B7280"/>
+
+                    <Label fx:id="lblFecha"
+                           text="Fecha"
+                           textFill="#111827">
+
+                        <font>
+                            <Font name="System Bold" size="14.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Hora"
+                           textFill="#6B7280"/>
+
+                    <Label fx:id="lblHora"
+                           text="Hora"
+                           textFill="#111827">
+
+                        <font>
+                            <Font name="System Bold" size="14.0"/>
+                        </font>
+
+                    </Label>
+
+                </VBox>
+
+                <!-- PANEL FORMULARIO -->
+
+                <VBox HBox.hgrow="ALWAYS"
+                      spacing="15.0"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-padding: 25;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);">
+
+                    <Label text="Datos del Paciente"
+                           textFill="#1E3A8A">
+
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Complete la información para confirmar el agendamiento"
+                           wrapText="true"
+                           textFill="#6B7280"/>
+
+                    <GridPane hgap="14.0"
+                              vgap="14.0"
+                              maxWidth="Infinity">
+
+                        <columnConstraints>
+
+                            <ColumnConstraints minWidth="140.0"
+                                               prefWidth="160.0"/>
+
+                            <ColumnConstraints hgrow="ALWAYS"/>
+
+                        </columnConstraints>
+
+                        <!-- NOMBRE -->
+
+                        <Label text="Nombre completo"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="0"/>
+
+                        <TextField fx:id="txtNombrePaciente"
+                                   promptText="Ingrese el nombre del paciente"
+                                   prefHeight="38.0"
+                                   maxWidth="Infinity"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="0"/>
+
+                        <!-- CEDULA -->
+
+                        <Label text="Cédula"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="1"/>
+
+                        <TextField fx:id="txtCedulaPaciente"
+                                   promptText="Documento de identidad"
+                                   prefHeight="38.0"
+                                   maxWidth="Infinity"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="1"/>
+
+                        <!-- TELEFONO -->
+
+                        <Label text="Teléfono"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="2"/>
+
+                        <TextField fx:id="txtTelefonoPaciente"
+                                   promptText="Número de contacto"
+                                   prefHeight="38.0"
+                                   maxWidth="Infinity"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"/>
+
+                        <!-- MOTIVO -->
+
+                        <Label text="Motivo"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="3"/>
+
+                        <TextArea fx:id="txtMotivo"
+                                  promptText="Motivo de la consulta"
+                                  prefHeight="95.0"
+                                  wrapText="true"
+                                  maxWidth="Infinity"
+                                  GridPane.columnIndex="1"
+                                  GridPane.rowIndex="3"/>
+
+                    </GridPane>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                    <!-- BOTONES -->
+
+                    <HBox alignment="CENTER_RIGHT"
+                          spacing="12.0">
+
+                        <Button fx:id="btnCancelar"
+                                text="Cancelar"
+                                onAction="#cancelar"
+                                prefHeight="42.0"
+                                prefWidth="120.0"
+                                style="-fx-background-color: #E5E7EB;
+                                       -fx-text-fill: #374151;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 10;"/>
+
+                        <Button fx:id="btnAgendar"
+                                text="Confirmar Cita"
+                                onAction="#agendarCita"
+                                prefHeight="42.0"
+                                prefWidth="150.0"
+                                style="-fx-background-color: #2563EB;
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 10;"/>
+
+                    </HBox>
+
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>
