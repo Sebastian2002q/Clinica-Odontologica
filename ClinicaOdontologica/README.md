@@ -1,40 +1,36 @@
 # Proyecto Final - Clínica Odontológica "DENTAL U"
 
-Este es el repositorio del proyecto final de Ingeniería de Software. Es un sistema de escritorio para agendar y gestionar citas odontológicas.
+Este es el repositorio del proyecto final de Ingeniería de Software. Es un sistema de escritorio para agendar y gestionar citas odontológicas, historias clínicas, pagos e inventario de insumos.
 
 ## Estructura y Arquitectura
 El proyecto está desarrollado en **Java 21** usando **JavaFX** para las interfaces gráficas y **Maven** para manejar las dependencias. También utilizamos **Lombok** para ahorrarnos escribir todo el código repetitivo de getters, setters y constructores.
 
-A nivel de diseño, aplicamos el patrón **MVC** (Modelo-Vista-Controlador):
-- **Modelo (`model`)**: Aquí están las clases principales de la lógica de negocio (`Paciente`, `Cita`, `Especialista`, `Usuario` y `ClinicaOdontologica`). La clase `ClinicaOdontologica` actúa como el contenedor principal que guarda las listas de todo.
-- **Vistas (`view` en resources)**: Son los archivos `.fxml` con el diseño de las pantallas.
-- **Controladores (`controller` y `viewcontroller`)**: Los `viewcontroller` son los que están enlazados al FXML y manejan los clics y eventos de la interfaz. Los `controller` normales sirven de puente para comunicarse con el modelo y mantener la lógica separada.
+A nivel de diseño, pasamos la estructura al patrón **MVP** (Modelo-Vista-Presentador) separando también los repositorios y servicios por módulos:
+- **Modelo (`model`)**: Aquí están las clases principales del negocio (`Paciente`, `Cita`, `Especialista`, `Agenda`, `BloqueHorario`, `HistoriaClinica`, `ProcedimientoClinico`, `Insumo`, `Pago`, `Caja`, `Recordatorio` y `Usuario`) junto con los `enums`.
+- **Repositorios (`repository`) y Servicios (`service`)**: Los repositorios manejan las listas en memoria de cada módulo y los servicios tienen las validaciones del negocio (verificar que el paciente esté registrado antes de agendar, validar horarios disponibles, actualizar la historia clínica y descontar insumos).
+- **Vistas (`view`) y Presentadores (`presenter`)**: Las interfaces gráficas están en `view/fx` implementando los contratos de `view/contract`, y los `presenter` sirven de puente entre la vista y los servicios para mantener la lógica separada de los componentes visuales.
 
-Además, implementamos el patrón **Singleton** en la clase `ModelFactory`. Esto es clave en el proyecto porque nos asegura que toda la aplicación trabaje sobre una única instancia de los datos en memoria, evitando que se pierda información al cambiar de una ventana a otra.
+Además, implementamos `ServiceLocator` (con patrón **Singleton**) y `DataSeeder` en el paquete `config`. Esto nos asegura que toda la aplicación trabaje sobre una única instancia de los datos en memoria, evitando que se pierda información al cambiar de una sección a otra.
 
 ## Datos de prueba (Datos quemados)
-Para la sustentación y pruebas, dejamos varios datos quemados en el método `inicializarDatos()` de la clase `ModelFactory` para no tener que empezar con el sistema vacío:
+Para la sustentación y pruebas, dejamos varios datos quemados en la clase `DataSeeder` para no tener que empezar con el sistema vacío:
 
 - **Usuarios para el login**:
   - Usuario: `admin` / Clave: `admin`
   - Usuario: `user` / Clave: `user`
-- **Especialistas**: Hay 10 especialistas quemados en el código con diferentes especialidades (Ortodoncia, Periodoncia, Endodoncia, etc.).
-- **Citas iniciales**: Dejamos 20 citas ya agendadas de prueba repartidas entre los especialistas.
-- **Horarios configurados**: La agenda está armada con fechas del **15 al 18 de mayo de 2026**. Los turnos van desde las 7:00 AM hasta las 12:00 PM, en intervalos de 30 minutos.
+  - Usuario: `doctor` / Clave: `doctor`
+- **Pacientes e Inventario**: Hay 10 pacientes registrados de prueba con su historia clínica creada y 7 insumos odontológicos iniciales en bodega.
+- **Especialistas**: Hay 10 especialistas quemados en el código con diferentes especialidades (Ortodoncia, Periodoncia, Endodoncia, Cirugía Oral, etc.).
+- **Citas iniciales**: Dejamos citas ya agendadas de prueba repartidas entre los especialistas.
+- **Horarios configurados**: La agenda está configurada por bloques horarios desde las 7:00 AM hasta las 12:00 PM y en la tarde desde las 2:00 PM, en intervalos de 30 minutos.
 
 ## ¿Cómo funciona la lógica del agendamiento?
-La parte más importante del sistema es cómo se maneja la disponibilidad:
+La parte más importante del sistema es cómo se maneja la disponibilidad y el flujo de la cita:
 
-- **Mapa de horarios**: Cada `Especialista` tiene un atributo `horariosDisponibles` que es un `Map<LocalDate, List<LocalTime>>`. Esto significa que por cada día (fecha), hay una lista de horas libres.
-- **Agendar cita**: Cuando desde la vista (`AgendamientoViewController`) se selecciona una hora y se guarda la cita, esa cita entra a la lista general de la clínica. Inmediatamente después, el sistema busca en el mapa del especialista y **elimina** esa hora exacta. Así evitamos que dos pacientes reserven el mismo turno.
-- **Cancelar cita**: Al eliminar una cita desde la interfaz, el sistema hace lo inverso: la saca de la lista general y **devuelve** la hora a la lista de disponibilidad del especialista (haciendo un sort para que los botones de horas vuelvan a aparecer en orden cronológico).
+- **Bloques de horario**: Cada `Especialista` tiene una `Agenda` con sus fechas y bloques de hora (`BloqueHorario`). En la pantalla los turnos disponibles se ven en verde y los que ya están reservados se ven en rojo.
+- **Agendar cita**: Primero se valida que la cédula del paciente exista en el sistema. Cuando se selecciona una hora libre y se guarda la cita, el sistema marca ese bloque como ocupado en la agenda del especialista. Así evitamos que dos pacientes reserven el mismo turno.
+- **Cancelar o reprogramar cita**: Al cancelar o cambiar una cita desde la interfaz, el sistema hace lo inverso: libera la hora anterior en la agenda del especialista para que vuelva a aparecer disponible.
+- **Atención e insumos**: Cuando se registra un procedimiento en la historia clínica, el sistema actualiza el expediente del paciente y descuenta automáticamente del inventario las unidades de insumos que se usaron en la consulta.
 
-## Instalación y Ejecución (.exe)
-Para correr el proyecto desde el código fuente, basta con ejecutar la clase `ClinicaOdontologicaApplication` desde el IDE.
-
-Si se va a presentar usando el ejecutable instalado:
-1. Descomprimir el archivo `.zip` entregado.
-2. Ejecutar el instalador incluido y seguir los pasos.
-3. Ir al disco local `C:/` y buscar la carpeta de **Archivos de programa** (o Program Files).
-4. Entrar a la carpeta `clinica-odontologia`.
-5. Ejecutar el archivo `.exe` que está ahí adentro para abrir la aplicación directamente.
+## Instalación y Ejecución
+Para correr el proyecto desde el código fuente, basta con abrir la carpeta `ClinicaOdontologica` en el IDE y ejecutar la clase `ClinicaOdontologicaApplication` (o `Launcher`).

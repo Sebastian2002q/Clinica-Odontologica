@@ -1,4 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: co.edu.uniquindio.clinicaodontologica.ClinicaOdontologicaApp
- lication
-
+Main-Class: co.edu.uniquindio.clinicaodontologica.Launcher
