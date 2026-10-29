@@ -121,7 +121,7 @@ public class AgendamientoService {
         }
         cita.cancelar();
         cita.getEspecialista().getAgenda().liberarBloque(cita.getFecha(), cita.getHora());
-        citaRepository.eliminar(idCita);
+        citaRepository.guardar(cita);
     }
 
     /**
