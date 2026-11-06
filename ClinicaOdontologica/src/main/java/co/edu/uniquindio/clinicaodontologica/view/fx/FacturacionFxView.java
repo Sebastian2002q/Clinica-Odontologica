@@ -16,10 +16,9 @@ import javafx.scene.layout.*;
 import java.util.List;
 
 /**
-  * Vista Pasiva JavaFX para F-04 (Registrar pago y flujo de caja diario) y RN-005.
-  * Desglosa el tratamiento clínico, permite elegir Efectivo/Tarjeta/Transferencia,
-  * posee el botón "Registrar Pago" y actualiza el flujo de caja diario exactamente en el valor cobrado.
-  */
+ * Vista Pasiva JavaFX para el cobro y control de flujo de caja.
+ * Permite seleccionar el método de pago e ingresar los datos requeridos por la estrategia correspondiente.
+ */
 public class FacturacionFxView implements IFacturacionView {
     private final FacturacionPresenter presenter;
     private final String nombreAuxiliarActual;
@@ -30,6 +29,8 @@ public class FacturacionFxView implements IFacturacionView {
     private Label lblValorTotal;
     private ComboBox<MetodoPago> cmbMetodoPago;
     private TextField txtMontoRecibido;
+    private Label lblReferencia;
+    private TextField txtReferenciaTransaccion;
 
     private Label lblFlujoCajaTotal;
     private Label lblDetalleMetodosCaja;
@@ -51,7 +52,7 @@ public class FacturacionFxView implements IFacturacionView {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(18));
 
-        // Izquierda: Pantalla de Cobro Rápido (F-04 SWR)
+        // Izquierda: Pantalla de Cobro Rápido
         VBox cardCobro = new VBox(12);
         cardCobro.setPrefWidth(460);
         cardCobro.setPadding(new Insets(22));
@@ -80,9 +81,14 @@ public class FacturacionFxView implements IFacturacionView {
         cmbMetodoPago.getItems().addAll(MetodoPago.values());
         cmbMetodoPago.setValue(MetodoPago.EFECTIVO);
         cmbMetodoPago.setMaxWidth(Double.MAX_VALUE);
+        cmbMetodoPago.setOnAction(e -> actualizarCamposSegunEstrategia(cmbMetodoPago.getValue()));
 
         txtMontoRecibido = new TextField();
         txtMontoRecibido.setPromptText("Monto recibido del paciente ($)");
+
+        lblReferencia = new Label("5. Referencia / Observación (Opcional en efectivo):");
+        txtReferenciaTransaccion = new TextField();
+        txtReferenciaTransaccion.setPromptText("Opcional: Detalle de pago...");
 
         Button btnRegistrarPago = new Button("Registrar Pago");
         btnRegistrarPago.setMaxWidth(Double.MAX_VALUE);
@@ -96,6 +102,7 @@ public class FacturacionFxView implements IFacturacionView {
                     cmbConsultasPorCobrar.getValue(),
                     cmbMetodoPago.getValue(),
                     txtMontoRecibido.getText(),
+                    txtReferenciaTransaccion.getText(),
                     nombreAuxiliarActual
             );
             if (onDataChangedCallback != null) {
@@ -109,8 +116,9 @@ public class FacturacionFxView implements IFacturacionView {
                 new Label("2. Desglose del Tratamiento Clínico:"), txtDesgloseClinico,
                 lblValorTotal,
                 new Separator(),
-                new Label("3. Método de Pago (Efectivo, Tarjeta, Transferencia) *:"), cmbMetodoPago,
+                new Label("3. Método de Pago (Patrón Strategy) *:"), cmbMetodoPago,
                 new Label("4. Monto Recibido ($) *:"), txtMontoRecibido,
+                lblReferencia, txtReferenciaTransaccion,
                 btnRegistrarPago
         );
 
@@ -131,32 +139,43 @@ public class FacturacionFxView implements IFacturacionView {
         lblFlujoCajaTotal = new Label("$0");
         lblFlujoCajaTotal.setStyle("-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;");
 
-        lblDetalleMetodosCaja = new Label("Efectivo: $0 | Tarjeta: $0 | Transferencia: $0");
-        lblDetalleMetodosCaja.setStyle("-fx-text-fill: #E0E7FF; -fx-font-size: 13px;");
+        lblDetalleMetodosCaja = new Label("Efectivo: $0 | Tarjeta: $0 | Transferencia: $0 | Convenio: $0");
+        lblDetalleMetodosCaja.setStyle("-fx-text-fill: #E0E7FF; -fx-font-size: 12px;");
 
         cardResumenCaja.getChildren().addAll(lblTitCaja, lblFlujoCajaTotal, lblDetalleMetodosCaja);
 
         HBox inferiorCaja = new HBox(14);
         VBox.setVgrow(inferiorCaja, Priority.ALWAYS);
 
+        // Columna Historial de Pagos
         VBox colHistorial = new VBox(8);
-        HBox.setHgrow(colHistorial, Priority.ALWAYS);
+        colHistorial.setPrefWidth(340);
+        Label lblHist = new Label("Comprobantes Emitidos en Jornada");
+        lblHist.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E3A8A;");
+
         listaPagosCaja = new ListView<>();
         VBox.setVgrow(listaPagosCaja, Priority.ALWAYS);
         listaPagosCaja.getSelectionModel().selectedItemProperty().addListener((obs, oldV, pagoSel) -> {
             if (pagoSel != null) {
-                txtComprobante.setText(pagoSel.generarTextoComprobante());
+                mostrarComprobanteGenerado(pagoSel.generarTextoComprobante());
             }
         });
-        colHistorial.getChildren().addAll(new Label("Pagos Registrados en Caja:"), listaPagosCaja);
 
+        colHistorial.getChildren().addAll(lblHist, listaPagosCaja);
+
+        // Columna Comprobante Oficial Formateado
         VBox colComprobante = new VBox(8);
         HBox.setHgrow(colComprobante, Priority.ALWAYS);
+        Label lblComp = new Label("Vista Previa del Comprobante Oficial");
+        lblComp.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E3A8A;");
+
         txtComprobante = new TextArea();
         txtComprobante.setEditable(false);
+        txtComprobante.setStyle("-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 12px;");
         VBox.setVgrow(txtComprobante, Priority.ALWAYS);
-        txtComprobante.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 12px;");
-        colComprobante.getChildren().addAll(new Label("Comprobante Oficial para el Paciente:"), txtComprobante);
+        txtComprobante.setPromptText("El comprobante oficial se emitirá al registrar el cobro...");
+
+        colComprobante.getChildren().addAll(lblComp, txtComprobante);
 
         inferiorCaja.getChildren().addAll(colHistorial, colComprobante);
         panelCaja.getChildren().addAll(cardResumenCaja, inferiorCaja);
@@ -166,6 +185,32 @@ public class FacturacionFxView implements IFacturacionView {
 
         presenter.cargarEstadoFacturacion();
         return root;
+    }
+
+    private void actualizarCamposSegunEstrategia(MetodoPago metodo) {
+        if (metodo == null) return;
+        switch (metodo) {
+            case EFECTIVO -> {
+                txtMontoRecibido.setDisable(false);
+                lblReferencia.setText("5. Observación / Referencia (Opcional):");
+                txtReferenciaTransaccion.setPromptText("Opcional: Detalle de billetes o recibido...");
+            }
+            case TARJETA -> {
+                txtMontoRecibido.setDisable(true);
+                lblReferencia.setText("5. No. de Autorización / Voucher Datáfono *:");
+                txtReferenciaTransaccion.setPromptText("Ej: AUT-847291 / Código de voucher...");
+            }
+            case TRANSFERENCIA -> {
+                txtMontoRecibido.setDisable(true);
+                lblReferencia.setText("5. No. Comprobante / Referencia Digital *:");
+                txtReferenciaTransaccion.setPromptText("Ej: Ref Nequi/Daviplata/PSE M-1829471...");
+            }
+            case CONVENIO -> {
+                txtMontoRecibido.setDisable(true);
+                lblReferencia.setText("5. No. de Póliza / Carnet / Convenio Dental *:");
+                txtReferenciaTransaccion.setPromptText("Ej: POL-SURA-992148 / Carnet institucional...");
+            }
+        }
     }
 
     public void refrescar() {
@@ -193,10 +238,11 @@ public class FacturacionFxView implements IFacturacionView {
     public void actualizarPanelFlujoCaja(Caja caja, List<Pago> historialPagos) {
         lblFlujoCajaTotal.setText("$" + String.format("%,.0f", caja.getFlujoCajaTotal()));
         lblDetalleMetodosCaja.setText(String.format(
-                "Efectivo: $%,.0f  |  Tarjeta: $%,.0f  |  Transferencia: $%,.0f  |  Total Pagos: %d",
+                "Efectivo: $%,.0f  |  Tarjeta: $%,.0f  |  Transferencia: $%,.0f  |  Convenio: $%,.0f  |  Total Pagos: %d",
                 caja.getTotalPorMetodo(MetodoPago.EFECTIVO),
                 caja.getTotalPorMetodo(MetodoPago.TARJETA),
                 caja.getTotalPorMetodo(MetodoPago.TRANSFERENCIA),
+                caja.getTotalPorMetodo(MetodoPago.CONVENIO),
                 historialPagos.size()
         ));
         listaPagosCaja.setItems(FXCollections.observableArrayList(historialPagos));

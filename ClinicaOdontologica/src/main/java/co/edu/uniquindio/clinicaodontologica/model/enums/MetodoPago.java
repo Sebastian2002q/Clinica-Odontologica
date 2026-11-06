@@ -1,24 +1,29 @@
 package co.edu.uniquindio.clinicaodontologica.model.enums;
 
 /**
-  * Enumeración que define los Métodos de Pago aceptados en la clínica.
-  */
+ * Enumeración que define los Métodos de Pago aceptados en la clínica.
+ */
 public enum MetodoPago {
 
     /**
-      * Pago en papel moneda físico con cálculo de cambio o devuelta.
-      */
+     * Pago en papel moneda físico con cálculo de cambio o devuelta.
+     */
     EFECTIVO("Efectivo"),
 
     /**
-      * Pago mediante tarjeta de débito o crédito en datáfono bancario.
-      */
+     * Pago mediante tarjeta de débito o crédito en datáfono bancario.
+     */
     TARJETA("Tarjeta Débito / Crédito"),
 
     /**
-      * Pago electrónico mediante transferencia o billetera digital (PSE, Bancolombia, Nequi, Daviplata).
-      */
-    TRANSFERENCIA("Transferencia Bancaria");
+     * Pago electrónico mediante transferencia o billetera digital (PSE, Bancolombia, Nequi, Daviplata).
+     */
+    TRANSFERENCIA("Transferencia Bancaria"),
+
+    /**
+     * Pago o liquidación mediante seguro médico, póliza o convenio odontológico.
+     */
+    CONVENIO("Convenio / Seguro Dental");
 
     private final String etiqueta;
 

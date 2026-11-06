@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
-  * Entidad de dominio que representa una Transacción de Pago y su Comprobante Oficial emitido.
-  */
+ * Entidad de dominio que representa una Transacción de Pago y su Comprobante Oficial emitido.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,73 +19,93 @@ import java.time.format.DateTimeFormatter;
 public class Pago {
 
     /**
-      * Identificador unívoco del registro de pago (ej. PAG-0001).
-      */
+     * Identificador unívoco del registro de pago (ej. PAG-0001).
+     */
     @EqualsAndHashCode.Include
     private String idPago;
 
     /**
-      * Número consecutivo del comprobante oficial de caja (ej. COMP-2026-0001).
-      */
+     * Número consecutivo del comprobante oficial de caja (ej. COMP-2026-0001).
+     */
     private String numeroComprobante;
 
     /**
-      * Identificador de la cita médica que se está liquidando.
-      */
+     * Identificador de la cita médica que se está liquidando.
+     */
     private String idCita;
 
     /**
-      * Cédula del paciente que efectúa o recibe el tratamiento.
-      */
+     * Cédula del paciente que efectúa o recibe el tratamiento.
+     */
     private String cedulaPaciente;
 
     /**
-      * Nombre completo del paciente.
-      */
+     * Nombre completo del paciente.
+     */
     private String nombrePaciente;
 
     /**
-      * Detalle clínico descriptivo de los procedimientos y tarifas liquidadas.
-      */
+     * Detalle clínico descriptivo de los procedimientos y tarifas liquidadas.
+     */
     private String desgloseTratamientos;
 
     /**
-      * Valor monetario total a pagar por el paciente.
-      */
+     * Valor monetario total a pagar por el paciente.
+     */
     private double valorTotal;
 
     /**
-      * Monto de dinero efectivamente entregado por el cliente en caja.
-      */
+     * Monto de dinero efectivamente entregado por el cliente en caja.
+     */
     private double montoRecibido;
 
     /**
-      * Cambio o dinero devuelto al paciente (para pagos en efectivo).
-      */
+     * Cambio o dinero devuelto al paciente (para pagos en efectivo).
+     */
     private double cambioDevuelto;
 
     /**
-      * Método o medio de pago utilizado (EFECTIVO, TARJETA, TRANSFERENCIA).
-      */
+     * Método o medio de pago utilizado (EFECTIVO, TARJETA, TRANSFERENCIA, CONVENIO).
+     */
     private MetodoPago metodoPago;
 
     /**
-      * Fecha y hora exacta de registro del pago.
-      */
+     * Código de autorización, voucher o referencia bancaria según la estrategia de pago.
+     */
+    private String referenciaTransaccion;
+
+    /**
+     * Fecha y hora exacta de registro del pago.
+     */
     private LocalDateTime fechaHora;
 
     /**
-      * Nombre del auxiliar o funcionario responsable del cobro en recepción.
-      */
+     * Nombre del auxiliar o funcionario responsable del cobro en recepción.
+     */
     private String auxiliarResponsable;
 
     /**
-      * Genera el texto formateado del comprobante oficial de pago para impresión o visualización.
-      *
-      * @return Cadena con el formato estructurado del recibo oficial
-      */
+     * Constructor de compatibilidad sin el campo de referencia de transacción.
+     */
+    public Pago(String idPago, String numeroComprobante, String idCita, String cedulaPaciente,
+                String nombrePaciente, String desgloseTratamientos, double valorTotal,
+                double montoRecibido, double cambioDevuelto, MetodoPago metodoPago,
+                LocalDateTime fechaHora, String auxiliarResponsable) {
+        this(idPago, numeroComprobante, idCita, cedulaPaciente, nombrePaciente, desgloseTratamientos,
+                valorTotal, montoRecibido, cambioDevuelto, metodoPago, "N/A", fechaHora, auxiliarResponsable);
+    }
+
+    /**
+     * Genera el texto formateado del comprobante oficial de pago para impresión o visualización.
+     *
+     * @return Cadena con el formato estructurado del recibo oficial
+     */
     public String generarTextoComprobante() {
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String refMostrar = (referenciaTransaccion != null && !referenciaTransaccion.isBlank())
+                ? referenciaTransaccion
+                : "N/A";
+
         return """
                 ====================================================
                         CLÍNICA ODONTOLÓGICA "DENTAL U" - SIGO
@@ -105,6 +125,7 @@ public class Pago {
                 ----------------------------------------------------
                 VALOR TOTAL     : $%,.2f
                 MÉTODO DE PAGO  : %s
+                REFERENCIA/AUT  : %s
                 MONTO RECIBIDO  : $%,.2f
                 CAMBIO DEVUELTO : $%,.2f
                 ====================================================
@@ -121,16 +142,17 @@ public class Pago {
                 desgloseTratamientos,
                 valorTotal,
                 metodoPago.getEtiqueta(),
+                refMostrar,
                 montoRecibido,
                 cambioDevuelto
         );
     }
 
     /**
-      * Representación textual para tablas de pagos.
-      *
-      * @return Cadena con comprobante, paciente, total y método
-      */
+     * Representación textual para tablas de pagos.
+     *
+     * @return Cadena con comprobante, paciente, total y método
+     */
     @Override
     public String toString() {
         return numeroComprobante + " | " + nombrePaciente + " | Total: $" + String.format("%,.2f", valorTotal)
